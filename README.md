@@ -160,8 +160,7 @@ Features:
 
 - Home Assistant installed (HA OS or Docker)
 - access to `/config` folder
-- executable script:
-  /config/scripts/vivatron
+- executable script: `/config/scripts/surplifeha`
 - Surplife device reachable in local network (example IP: 192.168.1.217)
 
 ---
@@ -172,6 +171,7 @@ Features:
 
 Add to configuration.yaml:
 
+```yaml
 shell_command:
   surplife_set_rgbw: >
     /config/scripts/surplifeha 192.168.1.217 color
@@ -179,11 +179,15 @@ shell_command:
     {{ states('input_number.surplife_g') | int }}
     {{ states('input_number.surplife_b') | int }}
     {{ states('input_number.surplife_w') | int }}
+```
 
 ---
 
 ### 2. Power Switch
 
+Add to configuration.yaml:
+
+```yaml
 switch:
   - platform: command_line
     switches:
@@ -192,11 +196,15 @@ switch:
         unique_id: surplife_power
         command_on: "/config/scripts/surplifeha 192.168.1.217 on"
         command_off: "/config/scripts/surplifeha 192.168.1.217 off"
+```
 
 ---
 
 ### 3. RGBW Sliders
 
+Add to configuration.yaml:
+
+```yaml
 input_number:
   surplife_r:
     name: "Red"
@@ -221,6 +229,7 @@ input_number:
     min: 0
     max: 255
     step: 1
+```
 
 ---
 
@@ -228,6 +237,7 @@ input_number:
 
 Add to automations.yaml or via UI:
 
+```yaml
 alias: Update Surplife RGBW
 trigger:
   - platform: state
@@ -236,24 +246,25 @@ trigger:
       - input_number.surplife_g
       - input_number.surplife_b
       - input_number.surplife_w
-
 action:
   - service: shell_command.surplife_set_rgbw
+```
 
 ---
 
 ### 5. Dashboard (Lovelace)
 
+```yaml
 type: entities
 title: Surplife Light
 entities:
   - entity: switch.surplife_power
     name: Power
-
   - entity: input_number.surplife_r
   - entity: input_number.surplife_g
   - entity: input_number.surplife_b
   - entity: input_number.surplife_w
+```
 
 ---
 
@@ -265,7 +276,9 @@ entities:
 4. Add dashboard card
 5. Ensure script is executable:
 
+```bash
 chmod +x /config/scripts/surplifeha
+```
 
 ---
 
@@ -284,7 +297,3 @@ chmod +x /config/scripts/surplifeha
 - Verify device IP address (192.168.1.217)
 - Test script manually from terminal
 - Ensure script has execute permissions
-
-
-
-
